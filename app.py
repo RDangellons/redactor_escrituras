@@ -1,61 +1,105 @@
-from modulos.generador import generar_compraventa
+from pathlib import Path
+from datetime import datetime
+from tkinter import Tk, Label, Entry, Button, messagebox
+from docxtpl import DocxTemplate
 
 
-datos = {
-    "escritura": {
-        "numero": "Uno(1)",
-        "volumen": "I",
-        "fecha": "2026-06-24",
-        "ciudad": "Tulancingo, Hidalgo",
-    },
+BASE_DIR = Path(__file__).resolve().parent
 
-    "notaria": {
-        "notario": "Alejandro Gonzalez Saragoza",
-        "notaria_numero": "16",
-    },
+RUTA_PLANTILLA = BASE_DIR / "plantilla.docx"
+CARPETA_GENERADAS = BASE_DIR / "generadas"
 
-    "vendedor": {
-        "nombre": "ANgel Alonso",
-        "nacionalidad": "mexicana",
-        "estado_civil": "casado",
-        "ocupacion": "comerciante",
-        "domicilio": "calle Reforma número 123, colonia Centro, Culiacán, Sinaloa",
-        "curp": "PELJ800101HSLRPN09",
-        "rfc": "PELJ800101XXX",
-        "identificacion": "credencial para votar expedida por el Instituto Nacional Electoral",
-    },
 
-    "comprador": {
-        "nombre": "MARÍA GARCÍA RUIZ",
-        "nacionalidad": "mexicana",
-        "estado_civil": "soltera",
-        "ocupacion": "empleada",
-        "domicilio": "avenida Constitución número 456, colonia Las Quintas, Culiacán, Sinaloa",
-        "curp": "GARM900202MSLRZR08",
-        "rfc": "GARM900202XXX",
-        "identificacion": "credencial para votar expedida por el Instituto Nacional Electoral",
-    },
+def generar_escritura():
+    vendedor_nombre = entrada_vendedor.get().strip()
+    comprador_nombre = entrada_comprador.get().strip()
 
-    "inmueble": {
-        "ubicacion": "calle Independencia número 789, colonia Centro, Culiacán, Sinaloa",
-        "superficie": "doscientos metros cuadrados",
-        "medidas_colindancias": "al norte mide diez metros y colinda con lote uno; al sur mide diez metros y colinda con calle Independencia; al oriente mide veinte metros y colinda con lote tres; y al poniente mide veinte metros y colinda con lote cinco",
-        "clave_catastral": "001-002-003-004",
-        "antecedente_registral": "inscripción número 123, libro 45, sección primera, del Registro Público de la Propiedad",
-    },
+    if not vendedor_nombre:
+        messagebox.showerror("Dato faltante", "Captura el nombre del vendedor.")
+        return
 
-    "operacion": {
-        "precio": "$850,000.00",
-        "precio_letra": "ochocientos cincuenta mil pesos 00/100 moneda nacional",
-        "forma_pago": "pago de contado",
+    if not comprador_nombre:
+        messagebox.showerror("Dato faltante", "Captura el nombre del comprador.")
+        return
+
+    if not RUTA_PLANTILLA.exists():
+        messagebox.showerror(
+            "Plantilla no encontrada",
+            "No se encontró el archivo plantilla.docx."
+        )
+        return
+
+    datos = {
+        "datosPV": {
+            "nombre": vendedor_nombre.upper()
+        },
+        "datosPC": {
+            "nombre": comprador_nombre.upper()
+        }
     }
-}
+
+    try:
+        CARPETA_GENERADAS.mkdir(exist_ok=True)
+
+        fecha_archivo = datetime.now().strftime("%Y%m%d_%H%M%S")
+        nombre_archivo = f"escritura_generada_{fecha_archivo}.docx"
+        ruta_salida = CARPETA_GENERADAS / nombre_archivo
+
+        doc = DocxTemplate(RUTA_PLANTILLA)
+        doc.render(datos)
+        doc.save(ruta_salida)
+
+        messagebox.showinfo(
+            "Escritura generada",
+            f"La escritura se generó correctamente:\n\n{ruta_salida}"
+        )
+
+        entrada_vendedor.delete(0, "end")
+        entrada_comprador.delete(0, "end")
+
+    except Exception as error:
+        messagebox.showerror(
+            "Error al generar",
+            f"Ocurrió un error:\n\n{error}"
+        )
 
 
-try:
-    archivo_generado = generar_compraventa(datos)
-    print("Escritura generada correctamente:")
-    print(archivo_generado)
+# Ventana principal
+ventana = Tk()
+ventana.title("Redactor de Escrituras")
+ventana.geometry("500x260")
+ventana.resizable(False, False)
 
-except ValueError as error:
-    print(error)
+Label(
+    ventana,
+    text="Sistema Redactor de Escrituras",
+    font=("Arial", 16, "bold")
+).pack(pady=15)
+
+Label(
+    ventana,
+    text="Nombre completo del vendedor:",
+    font=("Arial", 11)
+).pack()
+
+entrada_vendedor = Entry(ventana, width=55, font=("Arial", 11))
+entrada_vendedor.pack(pady=5)
+
+Label(
+    ventana,
+    text="Nombre completo del comprador:",
+    font=("Arial", 11)
+).pack()
+
+entrada_comprador = Entry(ventana, width=55, font=("Arial", 11))
+entrada_comprador.pack(pady=5)
+
+Button(
+    ventana,
+    text="Generar escritura",
+    font=("Arial", 12, "bold"),
+    width=25,
+    command=generar_escritura
+).pack(pady=20)
+
+ventana.mainloop()
