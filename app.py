@@ -43,8 +43,6 @@ CAMPOS = [
         "tipo": "entry",
         "mayusculas": True,
     },
-
-    
     {
         "ruta": "inmueble.descripcion",
         "pregunta": "Descripción completa del inmueble:",
@@ -63,7 +61,14 @@ CAMPOS = [
         "pregunta": "Superficie total del inmueble:",
         "tipo": "entry",
         "mayusculas": False,
-        "ayuda": "Ejemplo: 197.80 M2. (ciento noventa y siete metros con ochenta centímetros cuadrados)",
+        "ayuda": "Ejemplo: 197.80 ",
+    },
+    {
+        "ruta": "inmueble.superficie_letra",
+        "pregunta": "Ingrese la superficie en letra:",
+        "tipo": "entry",
+        "mayusculas": False,
+        "ayuda": "Ejemplo: ciento noventa y siete metros con ochenta centímetros",
     },
     {
         "ruta": "operacion.precio",
@@ -79,6 +84,78 @@ CAMPOS = [
         "mayusculas": False,
         "ayuda": "Ejemplo: un millón seiscientos mil pesos 00/100 moneda nacional",
     },
+    {
+        "ruta":"codigo.postal_v",
+        "pregunta":"Escriba el codigo postal del vendedor :",
+        "tipo":"entry",
+        "mayusculas": False,
+        "ayuda": "43600"
+
+    },
+    {
+        "ruta":"codigo.postal_c",
+        "pregunta":"Escriba el codigo postal del comprador :",
+        "tipo":"entry",
+        "mayusculas": False,
+        "ayuda": "43600"
+
+    },
+    {
+        "ruta": "fecha.nacimiento_v",
+        "pregunta": "Fecha completa de naciemiento del vendedor :",
+        "tipo": "entry",
+        "mayusculas": False,
+        "ayuda": "Ejemplo: 27 veintisiete días del mes de marzo de 2026 dos mil veintiséis",
+    },
+    {
+        "ruta": "ano.letra",
+        "pregunta": "Año con letra del vendedor:",
+        "tipo": "entry",
+        "mayusculas": False,
+        "ayuda": "Ejemplo: Mil novecientos noventa y ocho",
+    },
+    {
+        "ruta": "edad.numero",
+        "pregunta": "Edad del vendedor :",
+        "tipo": "entry",
+        "mayusculas": False,
+        "ayuda": "Ejemplo: 28",
+    },
+    {
+        "ruta": "edad.letra",
+        "pregunta": "Edad en letra del vendedor :",
+        "tipo": "entry",
+        "mayusculas": False,
+        "ayuda": "Ejemplo: Venti y ocho",
+    },
+    {
+        "ruta": "estado.civil_v",
+        "pregunta": "Estado civil del vendedor:",
+        "tipo": "combo",
+        "opciones": [
+            "soltero",
+            "casado",
+            "divorciado",
+            "viudo",
+        ],
+        "mayusculas": False,
+    },
+    {
+        "ruta": "ocupacion.vendedor",
+        "pregunta": "Ocupacion del vendedor:",
+        "tipo": "combo",
+        "opciones": [
+            "Campesino",
+            "Estudiante",
+            "Ama de casa",
+            "Abogado",
+            "Pensionado",
+            
+        ],
+        "mayusculas": False,
+    },
+
+
     
 ]
 
